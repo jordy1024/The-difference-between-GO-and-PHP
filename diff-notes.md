@@ -25,3 +25,55 @@ ENT_NOQUOTES	单/双引号都不转换
 '	撇号	&apos; (IE不支持)	&#39;
 ```
 
+### json_encode默认编码不一样
+```
+php 的 json_encode 函数，默认是会把中文转换为unicode字符，这样如果统计json_encode后的字符串时，就会按转换后的实际长度统计
+比如下面例子，php输出是50，而golang 中的话，默认没有此类选项，len()输出后长度是32
+
+【php版本】
+<?php
+    $res = array(
+        "content"=>"我现在有点忙"
+    );
+    $jJSON_UNESCAPED_UNICODE =  json_encode($res,JSON_UNESCAPED_UNICODE);
+    var_dump($jJSON_UNESCAPED_UNICODE);
+
+
+    $j = json_encode($res);
+    var_dump($j);
+
+    echo "strlen统计的json_encode默认转换后的长度:".strlen($j)."\n";
+
+
+输出结果：
+
+string(32) "{"content":"我现在有点忙"}"
+string(50) "{"content":"\u6211\u73b0\u5728\u6709\u70b9\u5fd9"}"
+strlen统计的json_encode默认转换后的长度:50
+
+
+【golang	版本】
+
+package main
+
+import (
+    "encoding/json"
+    "fmt"
+)
+
+type Test struct {
+    Content string `json:"content"`
+}
+
+func main() {
+    var t = &Test{}
+    t.Content = "我现在有点忙"
+    j, _ := json.Marshal(t)
+    fmt.Println(string(j))
+    fmt.Println(len(string(j)))
+}
+
+输出结果：
+{"content":"我现在有点忙"}
+32
+```
