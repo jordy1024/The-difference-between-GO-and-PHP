@@ -106,6 +106,6 @@ As a special case, if the field tag is "-", the field is always omitted. Note th
 #### 总结
 如果要依赖Json等内容做一些其他事情的时候，就需要注意下，比如：
 - 依赖Json内容统计长度
-- 依赖Json的内容做加解密等等操作时候，需要注意下
+- 依赖Json的内容做加解密等等操作
 
 
