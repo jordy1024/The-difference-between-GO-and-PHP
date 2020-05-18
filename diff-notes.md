@@ -77,3 +77,35 @@ func main() {
 {"content":"我现在有点忙"}
 32
 ```
+不过官方的文档写的很明确，Golang 的jons.Marshal就将html表情转换为对应的unicode字符，比如我们常见的&字符   
+在被json.Marshal后，会变成\u0026
+```
+func Marshal(v interface{}) ([]byte, error)
+Marshal returns the JSON encoding of v.
+
+Marshal traverses the value v recursively. If an encountered value implements the Marshaler interface and is not a nil pointer, Marshal calls its MarshalJSON method to produce JSON. If no MarshalJSON method is present but the value implements encoding.TextMarshaler instead, Marshal calls its MarshalText method and encodes the result as a JSON string. The nil pointer exception is not strictly necessary but mimics a similar, necessary exception in the behavior of UnmarshalJSON.
+
+Otherwise, Marshal uses the following type-dependent default encodings:
+
+Boolean values encode as JSON booleans.
+
+Floating point, integer, and Number values encode as JSON numbers.
+
+String values encode as JSON strings coerced to valid UTF-8, replacing invalid bytes with the Unicode replacement rune. So that the JSON will be safe to embed inside HTML <script> tags, the string is encoded using HTMLEscape, which replaces "<", ">", "&", U+2028, and U+2029 are escaped to "\u003c","\u003e", "\u0026", "\u2028", and "\u2029". This replacement can be disabled when using an Encoder, by calling SetEscapeHTML(false).
+
+Array and slice values encode as JSON arrays, except that []byte encodes as a base64-encoded string, and a nil slice encodes as the null JSON value.
+
+Struct values encode as JSON objects. Each exported struct field becomes a member of the object, using the field name as the object key, unless the field is omitted for one of the reasons given below.
+
+The encoding of each struct field can be customized by the format string stored under the "json" key in the struct field's tag. The format string gives the name of the field, possibly followed by a comma-separated list of options. The name may be empty in order to specify options without overriding the default field name.
+
+The "omitempty" option specifies that the field should be omitted from the encoding if the field has an empty value, defined as false, 0, a nil pointer, a nil interface value, and any empty array, slice, map, or string.
+
+As a special case, if the field tag is "-", the field is always omitted. Note that a field with name "-" can still be generated using the tag "-,".
+```
+#### 总结
+如果要依赖Json等内容做一些其他事情的时候，就需要注意下，比如：
+- 依赖Json内容统计长度
+- 依赖Json的内容做加解密等等操作时候，需要注意下
+
+
