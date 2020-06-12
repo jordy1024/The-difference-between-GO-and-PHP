@@ -103,6 +103,11 @@ The "omitempty" option specifies that the field should be omitted from the encod
 
 As a special case, if the field tag is "-", the field is always omitted. Note that a field with name "-" can still be generated using the tag "-,".
 ```
+
+utf8.RuneCountInString
+mb_strlen ( string $str [, string $encoding = mb_internal_encoding() ] )
+
+
 #### 总结
 如果要依赖Json等内容做一些其他事情的时候，就需要注意下，比如：
 - 依赖Json内容统计长度
