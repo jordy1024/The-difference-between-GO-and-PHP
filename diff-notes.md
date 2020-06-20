@@ -1,14 +1,22 @@
 ## 两种语言在严谨性、功能特性等方面的一些差异：
-### 1.url_decode 
+### 执行方式
+php是边解释边执行的动态脚本语言；
+golang是编译性的静态语言；
+
+### 变量类型
+php是弱类型语言，即声明一个变量时，我们无需显示的指定变量的类型
+golang是强类型语言，变量在声明时，就已经确定了类型；
+
+### url_decode 
 
 
-### 2.json_decode
+### json_decode
 ```
 对于一些特殊字符，php 中如果json_decode失败后，会直接返回NULL
 go中，会有具体的报错信息，如 json.Unmarshal([]byte(ywz), &ywzData)
 ```
 
-### 3.html实体字符转义
+### html实体字符转义
 ```
 [php]  htmlspecialchars(string,flags,character-set,double_encode)
 ENT_COMPAT	会转换双引号，不转换单引号。
